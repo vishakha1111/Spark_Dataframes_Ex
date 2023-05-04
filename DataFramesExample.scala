@@ -18,7 +18,24 @@ object DataFramesExample extends App{
   .config(sparkConf)
   .getOrCreate()
   
+  //Load Parquet file
   val ordersDf = spark.read
+  .option("path", "D:/VISHAKHA/BIG DATA COURSE/Week 11/users.parquet")
+  .load
+  ordersDf.printSchema
+  ordersDf.show(false)
+  
+  //Load JSON file
+  /*val ordersDf = spark.read
+  .format("json")
+  .option("path", "D:/VISHAKHA/BIG DATA COURSE/Week 11/players.json")
+  .option("mode", "DROPMALFORMED")
+  .load
+  ordersDf.printSchema()
+  ordersDf.show(false)*/
+  
+  //Load CSV file
+  /*val ordersDf = spark.read
   .option("header", true)
   .option("inferSchema", true)
   .csv("D:/VISHAKHA/BIG DATA COURSE/Week 11/orders.csv")
@@ -29,7 +46,7 @@ object DataFramesExample extends App{
   ordersDS.filter(x => x.order_id < 10)
   //ordersDf.filter("order_ids < 10").show()
   //Logger.getLogger(getClass.getName).info("My application has ran successfully")
-  ordersDf.printSchema()
+  ordersDf.printSchema()*/
   
   scala.io.StdIn.readLine()
   spark.stop()
