@@ -16,6 +16,7 @@ object DataFrames2 extends App{
   
   val spark = SparkSession.builder()
   .config(sparkConf)
+  .enableHiveSupport()
   .getOrCreate()
   
   //Load Parquet file
@@ -39,19 +40,23 @@ object DataFrames2 extends App{
   .format("csv")
   .option("header", true)
   .option("inferSchema", true)
-  .load("D:/VISHAKHA/BIG DATA COURSE/Week 11/orders.csv")
+  .option("path", "D:/VISHAKHA/BIG DATA COURSE/Week 11/orders.csv")
+  .load()
   
-  ordersDf.createOrReplaceTempView("orders")
+  /*ordersDf.createOrReplaceTempView("orders")
   
   val resultDf = spark.sql("select order_status, count(*) as status_count from orders group by order_status order by status_count desc")
   
-  resultDf.show
+  resultDf.show*/
+  
+  spark.sql("create database if not exists retail")
   
   ordersDf.write
   .format("csv")
   .mode(SaveMode.Overwrite)
-  .option("path", "D:/VISHAKHA/BIG DATA COURSE/Week 11/output1")
-  .save()
+  .saveAsTable("retail.orders")
+  
+  spark.catalog.listTables("retail").show()
   
   /*import spark.implicits._
   val ordersDS = ordersDf.as[OrdersData]
